@@ -1,4 +1,4 @@
-import { useSession } from "next-auth/react";
+import { useSession, signIn, signOut } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 import { useChannel } from "./ChatReactEffect";
 import Nav from "./Nav";

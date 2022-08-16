@@ -21,7 +21,9 @@
     "next-auth.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "**/*.js"
+    "**/*.js",
+    "src/components/ChatComponent.jsx",
+    "src/components/ChatComponent.jsx"
   ],
   "exclude": ["node_modules"]
 }

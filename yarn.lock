@@ -2,6 +2,13 @@
 # yarn lockfile v1
 
 
+"@ably-labs/react-hooks@^2.0.9":
+  version "2.0.9"
+  resolved "https://registry.yarnpkg.com/@ably-labs/react-hooks/-/react-hooks-2.0.9.tgz#311e8ec66e111ef1fcd69b7e64bd0120e71ea13b"
+  integrity sha512-mBTzQhzS4eybKwIC28Vgkikfny/K5pHNhgsyhuFIXUPT5Lv0dqaFG3sbpjlzGsZI+6vVpGp1AuloCP2BQu3zFQ==
+  dependencies:
+    ably "^1.2.27"
+
 "@ably/msgpack-js@^0.4.0":
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/@ably/msgpack-js/-/msgpack-js-0.4.0.tgz#aaaf5d8dffacf7aa253effd8c3488aa09130e6a2"
@@ -367,7 +374,7 @@
     "@typescript-eslint/types" "5.33.0"
     eslint-visitor-keys "^3.3.0"
 
-ably@^1.2.29:
+ably@^1.2.27, ably@^1.2.29:
   version "1.2.29"
   resolved "https://registry.yarnpkg.com/ably/-/ably-1.2.29.tgz#fa6d5cd2cfa693feb627b26c67d5b24a1e9535f6"
   integrity sha512-bgacOwmDBpHACysn1o0ZoScJsaiOeJoZXhIEUw9aMrqd91B3JBrtJwU80XJjPAw02lE7mxeGCWh85SDNNUN+hg==
@@ -2058,6 +2065,11 @@ react-dom@18.2.0:
   dependencies:
     loose-envify "^1.1.0"
     scheduler "^0.23.0"
+
+react-id-generator@^3.0.2:
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/react-id-generator/-/react-id-generator-3.0.2.tgz#e5bc5bae463907755e809beb625fafd67ded5d56"
+  integrity sha512-d0rqWzZ6g0P9agHtA7wX/ErQ4iV/657/0Oz+SX3kid7nR4d0YwaWjjOTIrgYHv2lICZKrxIH4BaKppKrM8fRfw==
 
 react-is@^16.13.1:
   version "16.13.1"

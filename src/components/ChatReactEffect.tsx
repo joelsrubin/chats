@@ -3,7 +3,10 @@ import { useEffect } from "react";
 
 const ably = new Ably.Realtime.Promise({ authUrl: "/api/createTokenRequest" });
 
-export function useChannel(channelName, callbackOnMessage) {
+export function useChannel(
+  channelName: string,
+  callbackOnMessage: (message: { data: string; clientId: string }) => void
+) {
   const channel = ably.channels.get(channelName);
 
   const onMount = () => {

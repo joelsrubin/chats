@@ -3,31 +3,41 @@ import React, { useEffect, useRef, useState } from "react";
 import { useChannel } from "./ChatReactEffect";
 import Nav from "./Nav";
 
+type Message = {
+  text: string;
+  author: string;
+  date: Date;
+};
+
 const AblyChatComponent = () => {
-  const boxRef = useRef();
+  const boxRef = useRef<HTMLDivElement>(null);
 
   const [messageText, setMessageText] = useState("");
-  const [receivedMessages, setMessages] = useState([]);
+  const [receivedMessages, setMessages] = useState<Message[]>([]);
 
   const messageTextIsEmpty = messageText.trim().length === 0;
   const { data: session } = useSession();
 
-  const [channel, ably] = useChannel("test", (message) => {
-    setMessages((prev) => [
-      ...prev,
-      {
-        text: message.data,
-        author: message.clientId,
-        date: new Date(),
-      },
-    ]);
-  });
+  const [channel, ably] = useChannel(
+    "test",
+    (message: { data: string; clientId: string }) => {
+      setMessages((prev) => [
+        ...prev,
+        {
+          text: message.data,
+          author: message.clientId,
+          date: new Date(),
+        },
+      ]);
+    }
+  );
 
   useEffect(() => {
-    boxRef.current.scrollIntoView({ behavior: "smooth" });
+    boxRef?.current?.scrollIntoView({ behavior: "smooth" });
   }, [receivedMessages]);
 
-  const ABLY_CLIENT_ID = ably.auth.clientId;
+  //@ts-ignore
+  const ABLY_CLIENT_ID = ably?.auth?.clientId;
 
   return (
     <div className="flex h-screen flex-col font-mono text-lg">
@@ -51,12 +61,16 @@ const AblyChatComponent = () => {
                 return (
                   <div
                     className={`flex flex-col justify-between ${
-                      message.author === ABLY_CLIENT_ID && "text-right"
-                    } mx-10`}
+                      message.author === ABLY_CLIENT_ID
+                        ? "self-end rounded-l-lg rounded-br-lg bg-blue-900 text-right"
+                        : "rounded-r-lg rounded-bl-lg bg-green-900"
+                    } mx-10 h-full w-fit p-4`}
                     key={i}
                   >
                     <p>{message.text}</p>
-                    <p>{message.date.toLocaleTimeString()}</p>
+                    <p className="text-xs">
+                      {message.date.toLocaleTimeString()}
+                    </p>
                   </div>
                 );
               })}
@@ -73,7 +87,8 @@ const AblyChatComponent = () => {
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            channel.publish("test", messageText);
+            //@ts-ignore
+            channel?.publish("test", messageText);
             setMessageText("");
           }}
           className="m-10 flex w-3/4 flex-col justify-center font-mono text-lg sm:w-1/2 md:w-1/4"

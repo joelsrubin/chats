@@ -22,8 +22,8 @@
     "**/*.ts",
     "**/*.tsx",
     "**/*.js",
-    "src/components/ChatComponent.jsx",
-    "src/components/ChatComponent.jsx"
+    "src/components/ChatComponent.tsx",
+    "src/components/ChatComponent.tsx"
   ],
   "exclude": ["node_modules"]
 }

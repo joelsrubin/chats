@@ -1,4 +1,5 @@
 import { useSession, signIn, signOut } from "next-auth/react";
+import { userAgent } from "next/server";
 import React, { useEffect, useRef, useState } from "react";
 import { useChannel } from "./ChatReactEffect";
 import Nav from "./Nav";
@@ -38,7 +39,7 @@ const AblyChatComponent = () => {
 
   //@ts-ignore
   const ABLY_CLIENT_ID = ably?.auth?.clientId;
-
+  console.log(session);
   return (
     <div className="flex h-screen flex-col font-mono text-lg">
       {session ? (
@@ -60,17 +61,21 @@ const AblyChatComponent = () => {
               {receivedMessages.map((message, i) => {
                 return (
                   <div
-                    className={`flex flex-col justify-between ${
-                      message.author === ABLY_CLIENT_ID
-                        ? "self-end rounded-l-lg rounded-br-lg bg-blue-900 text-right"
-                        : "rounded-r-lg rounded-bl-lg bg-green-900"
-                    } m-4 mx-10 h-full w-fit p-4`}
+                    className={`m-4 mx-10 flex h-full w-fit flex-col justify-between p-4 ${
+                      message.author === ABLY_CLIENT_ID && "self-end "
+                    }`}
                     key={i}
                   >
-                    <p>{message.text}</p>
-                    <p className="text-xs">
-                      {message.date.toLocaleTimeString()}
-                    </p>
+                    <div
+                      className={`${
+                        message.author === ABLY_CLIENT_ID
+                          ? "self-end rounded-l-lg rounded-br-lg bg-blue-900 text-right"
+                          : "rounded-r-lg rounded-bl-lg bg-green-900"
+                      } p-4`}
+                    >
+                      <p>{message.text}</p>
+                    </div>
+                    <p className="pt-2 text-xs">{session?.user?.name}</p>
                   </div>
                 );
               })}

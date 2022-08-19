@@ -38,7 +38,7 @@ const AblyChatComponent = () => {
   }, [receivedMessages]);
 
   //@ts-ignore
-  const ABLY_CLIENT_ID = ably?.auth?.clientId;
+
   const USER_NAME = session?.user?.name;
   return (
     <div className="text-md flex h-screen flex-col font-mono">
@@ -58,29 +58,29 @@ const AblyChatComponent = () => {
             </Nav>
             <main className="text-md overflow-scroll font-mono">
               <div className="flex flex-col justify-between gap-4 py-10">
-                {receivedMessages.map((message, i) => {
+                {receivedMessages.map(({ author, text }, i) => {
                   return (
                     <div
                       className={`mx-4 flex h-full w-fit flex-col justify-between ${
-                        USER_NAME === message.author && "self-end "
+                        USER_NAME === author && "self-end "
                       }`}
                       key={i}
                     >
                       <div
                         className={`${
-                          USER_NAME === message.author
+                          USER_NAME === author
                             ? "self-end rounded-l-lg rounded-br-lg bg-blue-900 text-right"
-                            : "rounded-r-lg rounded-bl-lg bg-green-900"
+                            : "rounded-r-lg rounded-bl-lg bg-amber-400 text-black"
                         } p-4`}
                       >
-                        <p>{message.text}</p>
+                        <p>{text}</p>
                       </div>
                       <p
                         className={`pt-2 text-xs ${
-                          USER_NAME === message.author && "self-end"
+                          USER_NAME === author && "self-end"
                         }`}
                       >
-                        {message.author}
+                        {author}
                       </p>
                     </div>
                   );

@@ -64,7 +64,7 @@ const AblyChatComponent = () => {
                       message.author === ABLY_CLIENT_ID
                         ? "self-end rounded-l-lg rounded-br-lg bg-blue-900 text-right"
                         : "rounded-r-lg rounded-bl-lg bg-green-900"
-                    } mx-10 h-full w-fit p-4`}
+                    } m-4 mx-10 h-full w-fit p-4`}
                     key={i}
                   >
                     <p>{message.text}</p>

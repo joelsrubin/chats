@@ -42,7 +42,7 @@ const AblyChatComponent = () => {
   return (
     <div className="flex h-screen flex-col font-mono text-lg">
       {session ? (
-        <div className="flex h-full flex-col overflow-scroll">
+        <div className="flex h-full flex-col overflow-auto">
           <Nav>
             <div className="flex flex-row justify-between">
               <p className="flex items-center justify-center">

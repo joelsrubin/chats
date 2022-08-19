@@ -57,11 +57,11 @@ const AblyChatComponent = () => {
             </div>
           </Nav>
           <main className="text-md overflow-scroll font-mono">
-            <div className="flex flex-col justify-between py-10">
+            <div className="flex flex-col justify-between gap-4 py-10">
               {receivedMessages.map((message, i) => {
                 return (
                   <div
-                    className={`m-4 mx-10 flex h-full w-fit flex-col justify-between ${
+                    className={`mx-4 flex h-full w-fit flex-col justify-between ${
                       USER_NAME === message.author && "self-end "
                     }`}
                     key={i}

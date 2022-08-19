@@ -39,7 +39,7 @@ const AblyChatComponent = () => {
 
   //@ts-ignore
   const ABLY_CLIENT_ID = ably?.auth?.clientId;
-  console.log(session);
+
   return (
     <div className="flex h-screen flex-col font-mono text-lg">
       {session ? (

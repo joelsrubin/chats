@@ -1,8 +1,10 @@
 import { useSession, signIn, signOut } from "next-auth/react";
+import Link from "next/link";
+import { useRouter } from "next/router";
 
 import React, { useEffect, useRef, useState } from "react";
-import { useChannel } from "./ChatReactEffect";
-import Nav from "./Nav";
+import { useChannel } from "../../components/ChatReactEffect";
+import Nav from "../../components/Nav";
 
 type Message = {
   text: string;
@@ -11,6 +13,9 @@ type Message = {
 };
 
 const AblyChatComponent = () => {
+  const query = useRouter();
+
+  let room = query.query.room as string;
   const boxRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -20,9 +25,10 @@ const AblyChatComponent = () => {
   const { data: session } = useSession();
 
   const [channel, ably] = useChannel(
-    "test",
+    room,
     (message: { data: string; clientId: string }) => {
       boxRef?.current?.scrollIntoView({ behavior: "smooth" });
+
       setMessages((prev) => [
         ...prev,
         {
@@ -46,14 +52,17 @@ const AblyChatComponent = () => {
       {session ? (
         <>
           <div className="flex h-full flex-col overflow-auto">
+            <Link href="/">
+              <h1 className="cursor-pointer bg-gray-800 pt-4 text-center underline decoration-slate-400">
+                Chats
+              </h1>
+            </Link>
             <Nav>
               <div className="flex flex-row justify-between">
                 <p className="flex items-center justify-center">
-                  hi {session.user?.name}
+                  hi {session.user?.name} welcome to {room}
                 </p>
-                <h1 className="bg-gray-800 pt-4 text-center underline decoration-slate-400">
-                  Chats
-                </h1>
+
                 <button onClick={() => signOut()}>Sign out</button>
               </div>
             </Nav>
@@ -95,7 +104,7 @@ const AblyChatComponent = () => {
               onSubmit={(e) => {
                 e.preventDefault();
                 //@ts-ignore
-                channel?.publish("test", messageText);
+                channel?.publish(room, messageText);
                 setMessageText("");
                 inputRef.current?.focus();
               }}

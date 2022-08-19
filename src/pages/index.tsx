@@ -1,18 +1,15 @@
 import type { NextPage } from "next";
-import { signIn, signOut, useSession } from "next-auth/react";
-import Nav from "../components/Nav";
+import { useSession } from "next-auth/react";
+
 import { trpc } from "../utils/trpc";
 
 import dynamic from "next/dynamic";
-import { useEffect, useState } from "react";
-import { useChannel } from "../components/ChatReactEffect";
-const AblyChatComponent = dynamic(() => import("../components/ChatComponent"), {
-  ssr: false,
-});
+
+import Link from "next/link";
+
 type TechnologyCardProps = {
   name: string;
   description: string;
-  documentation: string;
 };
 
 type Message = {
@@ -20,42 +17,44 @@ type Message = {
   date: Date;
   author: string;
 };
-// configureAbly({
-//   key: "JQheCg.6yacKQ:7W3ZanQZMr2VLOUf6Zj4BO-GSf8SXaN3LM1g-A30wss",
-//   clientId: String(Math.floor(Math.random() * 100)),
-// });
 
 const Home: NextPage = () => {
   const hello = trpc.useQuery(["example.hello", { text: "from tRPC" }]);
-  const { data: session, status } = useSession();
+  const { status } = useSession();
 
   if (status === "loading") {
     return (
-      <div className="flex justify-center text-center items-center bg-gray-800 text-white font-mono text-lg">
+      <div className="flex items-center justify-center bg-gray-800 text-center font-mono text-lg text-white">
         Loading...
       </div>
     );
   }
-  return <AblyChatComponent />;
+  return <Rooms />;
 };
 
-const TechnologyCard = ({
-  name,
-  description,
-  documentation,
-}: TechnologyCardProps) => {
+const Rooms = () => {
+  const rooms = ["room1", "test", "debate", "chill_out", "friends"];
   return (
-    <section className="flex flex-col justify-center p-6 duration-500 border-2 border-gray-500 rounded shadow-xl motion-safe:hover:scale-105">
-      <h2 className="text-lg text-gray-700">{name}</h2>
-      <p className="text-sm text-gray-600">{description}</p>
-      <a
-        className="mt-3 text-sm underline text-violet-500 decoration-dotted underline-offset-2"
-        href={documentation}
-        target="_blank"
-        rel="noreferrer"
-      >
-        Documentation
-      </a>
+    <>
+      <div className="align-center flex h-screen flex-col items-center justify-center">
+        {rooms.map((room) => (
+          <TechnologyCard name={room} description={""} key={room} />
+        ))}
+      </div>
+    </>
+  );
+};
+
+const TechnologyCard = ({ name, description }: TechnologyCardProps) => {
+  return (
+    <section className="flex w-3/4 flex-col justify-center rounded border-2 border-gray-500 p-6 font-mono text-white shadow-xl duration-500 motion-safe:hover:scale-105">
+      <h2 className="text-lg ">{name}</h2>
+      <p className="text-sm ">{description}</p>
+      <Link href={`/chat/${name}`}>
+        <a className="mt-3 cursor-pointer text-sm text-violet-500 underline decoration-dotted underline-offset-2">
+          Select
+        </a>
+      </Link>
     </section>
   );
 };

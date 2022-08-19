@@ -75,7 +75,7 @@ const AblyChatComponent = () => {
                     >
                       <p>{message.text}</p>
                     </div>
-                    <p className="pt-2 text-xs">{session?.user?.name}</p>
+                    <p className="pt-2 text-xs">{message.author}</p>
                   </div>
                 );
               })}

@@ -12,6 +12,7 @@ type Message = {
 
 const AblyChatComponent = () => {
   const boxRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const [messageText, setMessageText] = useState("");
   const [receivedMessages, setMessages] = useState<Message[]>([]);
@@ -40,7 +41,7 @@ const AblyChatComponent = () => {
   const ABLY_CLIENT_ID = ably?.auth?.clientId;
   const USER_NAME = session?.user?.name;
   return (
-    <div className="flex h-screen flex-col font-mono text-lg">
+    <div className="text-md flex h-screen flex-col font-mono">
       {session ? (
         <div className="flex h-full flex-col overflow-auto">
           <Nav>
@@ -55,12 +56,12 @@ const AblyChatComponent = () => {
               <button onClick={() => signOut()}>Sign out</button>
             </div>
           </Nav>
-          <main className="overflow-scroll font-mono text-lg">
+          <main className="text-md overflow-scroll font-mono">
             <div className="flex flex-col justify-between py-10">
               {receivedMessages.map((message, i) => {
                 return (
                   <div
-                    className={`m-4 mx-10 flex h-full w-fit flex-col justify-between p-4 ${
+                    className={`m-4 mx-10 flex h-full w-fit flex-col justify-between ${
                       USER_NAME === message.author && "self-end "
                     }`}
                     key={i}
@@ -100,6 +101,7 @@ const AblyChatComponent = () => {
             //@ts-ignore
             channel?.publish("test", messageText);
             setMessageText("");
+            inputRef.current?.focus();
           }}
           className="m-10 flex w-3/4 flex-col justify-center font-mono text-lg sm:w-1/2 md:w-1/4"
         >
@@ -112,6 +114,7 @@ const AblyChatComponent = () => {
             placeholder="Type a message"
             value={messageText}
             autoFocus
+            ref={inputRef}
           />
           <button className="mt-2 rounded-md bg-slate-200 p-2 text-black shadow-md shadow-black active:translate-y-0.5 active:shadow-none">
             send

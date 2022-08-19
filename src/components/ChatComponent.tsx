@@ -1,5 +1,5 @@
 import { useSession, signIn, signOut } from "next-auth/react";
-import { userAgent } from "next/server";
+
 import React, { useEffect, useRef, useState } from "react";
 import { useChannel } from "./ChatReactEffect";
 import Nav from "./Nav";
@@ -39,7 +39,7 @@ const AblyChatComponent = () => {
 
   //@ts-ignore
   const ABLY_CLIENT_ID = ably?.auth?.clientId;
-
+  const USER_NAME = session?.user?.name;
   return (
     <div className="flex h-screen flex-col font-mono text-lg">
       {session ? (
@@ -62,13 +62,13 @@ const AblyChatComponent = () => {
                 return (
                   <div
                     className={`m-4 mx-10 flex h-full w-fit flex-col justify-between p-4 ${
-                      message.author === ABLY_CLIENT_ID && "self-end "
+                      USER_NAME === ABLY_CLIENT_ID && "self-end "
                     }`}
                     key={i}
                   >
                     <div
                       className={`${
-                        message.author === ABLY_CLIENT_ID
+                        USER_NAME === ABLY_CLIENT_ID
                           ? "self-end rounded-l-lg rounded-br-lg bg-blue-900 text-right"
                           : "rounded-r-lg rounded-bl-lg bg-green-900"
                       } p-4`}

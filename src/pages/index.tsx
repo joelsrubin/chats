@@ -36,7 +36,7 @@ const Rooms = () => {
   const rooms = ["room1", "test", "debate", "chill_out", "friends"];
   return (
     <>
-      <div className="align-center flex h-screen flex-col items-center justify-center">
+      <div className="align-center flex h-screen flex-col items-center justify-center gap-5">
         {rooms.map((room) => (
           <TechnologyCard name={room} description={""} key={room} />
         ))}
@@ -47,15 +47,15 @@ const Rooms = () => {
 
 const TechnologyCard = ({ name, description }: TechnologyCardProps) => {
   return (
-    <section className="flex w-3/4 flex-col justify-center rounded border-2 border-gray-500 p-6 font-mono text-white shadow-xl duration-500 motion-safe:hover:scale-105">
-      <h2 className="text-lg ">{name}</h2>
-      <p className="text-sm ">{description}</p>
-      <Link href={`/chat/${name}`}>
+    <Link href={`/chat/${name}`}>
+      <section className="flex w-1/2 cursor-pointer flex-col justify-center rounded border-2 border-gray-500 p-6 font-mono text-white shadow-xl duration-200 motion-safe:hover:scale-105">
+        <h2 className="text-lg ">{name}</h2>
+        <p className="text-sm ">{description}</p>
         <a className="mt-3 cursor-pointer text-sm text-violet-500 underline decoration-dotted underline-offset-2">
           Select
         </a>
-      </Link>
-    </section>
+      </section>
+    </Link>
   );
 };
 

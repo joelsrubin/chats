@@ -74,7 +74,13 @@ const AblyChatComponent = () => {
                     >
                       <p>{message.text}</p>
                     </div>
-                    <p className="pt-2 text-xs">{message.author}</p>
+                    <p
+                      className={`pt-2 text-xs ${
+                        USER_NAME === message.author && "self-end"
+                      }`}
+                    >
+                      {message.author}
+                    </p>
                   </div>
                 );
               })}

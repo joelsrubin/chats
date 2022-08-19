@@ -22,6 +22,7 @@ const AblyChatComponent = () => {
   const [channel, ably] = useChannel(
     "test",
     (message: { data: string; clientId: string }) => {
+      boxRef?.current?.scrollIntoView({ behavior: "smooth" });
       setMessages((prev) => [
         ...prev,
         {

@@ -16,7 +16,6 @@ const AblyChatComponent = () => {
   const [messageText, setMessageText] = useState("");
   const [receivedMessages, setMessages] = useState<Message[]>([]);
 
-  const messageTextIsEmpty = messageText.trim().length === 0;
   const { data: session } = useSession();
 
   const [channel, ably] = useChannel(
@@ -62,13 +61,13 @@ const AblyChatComponent = () => {
                 return (
                   <div
                     className={`m-4 mx-10 flex h-full w-fit flex-col justify-between p-4 ${
-                      USER_NAME === ABLY_CLIENT_ID && "self-end "
+                      USER_NAME === message.author && "self-end "
                     }`}
                     key={i}
                   >
                     <div
                       className={`${
-                        USER_NAME === ABLY_CLIENT_ID
+                        USER_NAME === message.author
                           ? "self-end rounded-l-lg rounded-br-lg bg-blue-900 text-right"
                           : "rounded-r-lg rounded-bl-lg bg-green-900"
                       } p-4`}

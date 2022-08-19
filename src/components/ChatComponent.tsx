@@ -123,7 +123,7 @@ const AblyChatComponent = () => {
             onClick={() => signIn("discord")}
             className="rounded-sm bg-slate-200 p-4 text-black active:translate-y-0.5 active:shadow-none"
           >
-            Log in with discord
+            Log in with google
           </button>
         </div>
       )}

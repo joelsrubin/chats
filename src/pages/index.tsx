@@ -38,7 +38,7 @@ const Rooms = () => {
     <>
       <div className="align-center flex h-screen flex-col items-center justify-center gap-5">
         <h1 className="p-2 text-center font-mono text-6xl italic underline decoration-dotted underline-offset-8">
-          Chats
+          chats
         </h1>
         {rooms.map((room) => (
           <TechnologyCard name={room} description={""} key={room} />

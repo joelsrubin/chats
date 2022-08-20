@@ -1,9 +1,10 @@
+import { useChannel, usePresence } from "@ably-labs/react-hooks";
 import { useSession, signIn, signOut } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { NextPageContext } from "next";
+import { useEffect, useRef, useState } from "react";
 
-import React, { useEffect, useRef, useState } from "react";
-import { useChannel } from "../../components/ChatReactEffect";
 import Nav from "../../components/Nav";
 
 type Message = {
@@ -13,9 +14,9 @@ type Message = {
 };
 
 const AblyChatComponent = () => {
-  const query = useRouter();
+  const { query } = useRouter();
 
-  let room = query.query.room as string;
+  let { room } = query as { room: string };
   const boxRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -24,7 +25,7 @@ const AblyChatComponent = () => {
 
   const { data: session } = useSession();
 
-  const [channel, ably] = useChannel(
+  const [channel] = useChannel(
     room,
     (message: { data: string; clientId: string }) => {
       boxRef?.current?.scrollIntoView({ behavior: "smooth" });
@@ -40,13 +41,18 @@ const AblyChatComponent = () => {
     }
   );
 
+  const USER_NAME = session?.user?.name;
+  const [presenceData] = usePresence(room);
+
+  const others = presenceData
+    .filter((item) => {
+      item.clientId !== USER_NAME;
+    })
+    .map((item) => item.clientId);
   useEffect(() => {
     boxRef?.current?.scrollIntoView({ behavior: "smooth" });
   }, [receivedMessages]);
 
-  //@ts-ignore
-
-  const USER_NAME = session?.user?.name;
   return (
     <div className="text-md flex h-screen flex-col font-mono">
       {session ? (
@@ -57,6 +63,22 @@ const AblyChatComponent = () => {
                 Chats
               </h1>
             </Link>
+            <div className="flex flex-row justify-center gap-2 bg-gray-800">
+              <div className="self-end bg-gray-800">
+                other folks in the room: {others.length}
+              </div>
+              {others.length ? (
+                <div className="group relative h-2 w-2 cursor-pointer rounded-full bg-green-400">
+                  <div>
+                    <ul className="absolute hidden w-fit rounded-lg bg-slate-600 p-4 text-xs group-hover:flex">
+                      {others.map((name) => (
+                        <li key={name}>{name}</li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              ) : null}
+            </div>
             <Nav>
               <div className="flex flex-row justify-between">
                 <p className="flex items-center justify-center">
@@ -90,7 +112,7 @@ const AblyChatComponent = () => {
                           USER_NAME === author && "self-end"
                         }`}
                       >
-                        {author}
+                        {author.split(" ")[0]}
                       </p>
                     </div>
                   );
@@ -103,8 +125,7 @@ const AblyChatComponent = () => {
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                //@ts-ignore
-                channel?.publish(room, messageText);
+                channel.publish(room, messageText);
                 setMessageText("");
                 inputRef.current?.focus();
               }}
@@ -140,5 +161,15 @@ const AblyChatComponent = () => {
     </div>
   );
 };
+
+export async function getServerSideProps(context: NextPageContext) {
+  const { query } = context;
+  const { room } = query as { room: string };
+  return {
+    props: {
+      room,
+    },
+  };
+}
 
 export default AblyChatComponent;

@@ -54,7 +54,7 @@ const AblyChatComponent = () => {
   const [presenceData, updateStatus] = usePresence(room, "active");
 
   const others = presenceData
-    // .filter((item) => item.clientId !== USER_NAME)
+    .filter((item) => item.clientId !== USER_NAME)
     .map((item) => ({
       id: item.clientId,
       status: item.data,

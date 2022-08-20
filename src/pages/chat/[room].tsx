@@ -6,6 +6,7 @@ import { NextPageContext } from "next";
 import { useEffect, useRef, useState } from "react";
 
 import Nav from "../../components/Nav";
+import { useIdleTimer } from "react-idle-timer";
 
 type Message = {
   text: string;
@@ -40,14 +41,28 @@ const AblyChatComponent = () => {
       ]);
     }
   );
+  const onIdle = () => {
+    updateStatus("idle");
+  };
 
+  const onActive = () => {
+    updateStatus("active");
+  };
+
+  const idleTimer = useIdleTimer({ onIdle, onActive, timeout: 5000 });
   const USER_NAME = session?.user?.name;
-  const [presenceData] = usePresence(room);
+  const [presenceData, updateStatus] = usePresence(room, "active");
 
   const others = presenceData
-    .filter((item) => item.clientId !== USER_NAME)
-    .map((item) => item.clientId);
+    // .filter((item) => item.clientId !== USER_NAME)
+    .map((item) => ({
+      id: item.clientId,
+      status: item.data,
+    }));
 
+  const groupStatus = others.every((item) => item.status === "idle");
+
+  const groupStatusClass = groupStatus ? "bg-amber-500" : "bg-green-500";
   useEffect(() => {
     boxRef?.current?.scrollIntoView({ behavior: "smooth" });
   }, [receivedMessages]);
@@ -64,15 +79,27 @@ const AblyChatComponent = () => {
             </Link>
             <div className="flex flex-row justify-center gap-2 bg-gray-800">
               <div className="self-end bg-gray-800">
-                other folks in the room: {others.length}
+                members: {others.length}
               </div>
               {others.length ? (
                 <div className="group relative cursor-pointer">
-                  <div className="h-2 w-2 rounded-full bg-green-400" />
+                  <div className={`h-2 w-2 rounded-full ${groupStatusClass}`} />
                   <div>
-                    <ul className="absolute hidden rounded-lg bg-slate-600 p-4 text-xs group-hover:inline-block">
-                      {others.map((name) => (
-                        <li key={name}>{name}</li>
+                    <ul className=" absolute hidden rounded-lg bg-slate-600 p-4 text-xs group-hover:inline-block">
+                      {others.map((person) => (
+                        <li
+                          key={person.id}
+                          className="flex w-20 flex-row justify-between"
+                        >
+                          <span>{person.id}</span>
+                          <div
+                            className={`h-2 w-2 self-center rounded-full ${
+                              person.status === "active"
+                                ? "bg-green-400"
+                                : "bg-amber-400"
+                            }`}
+                          />
+                        </li>
                       ))}
                     </ul>
                   </div>
@@ -81,9 +108,7 @@ const AblyChatComponent = () => {
             </div>
             <Nav>
               <div className="flex flex-row justify-between">
-                <p className="flex items-center justify-center">
-                  hi {session.user?.name} welcome to {room}
-                </p>
+                <p className="flex items-center justify-center">room: {room}</p>
 
                 <button onClick={() => signOut()}>Sign out</button>
               </div>

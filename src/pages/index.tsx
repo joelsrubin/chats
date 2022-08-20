@@ -6,6 +6,7 @@ import { trpc } from "../utils/trpc";
 import dynamic from "next/dynamic";
 
 import Link from "next/link";
+import { usePresence } from "@ably-labs/react-hooks";
 
 type TechnologyCardProps = {
   name: string;
@@ -32,8 +33,9 @@ const Home: NextPage = () => {
   return <Rooms />;
 };
 
-const Rooms = () => {
+function Rooms() {
   const rooms = ["room1", "test", "debate", "chill_out", "friends"];
+
   return (
     <>
       <div className="align-center flex h-screen flex-col items-center justify-center gap-5">
@@ -46,19 +48,32 @@ const Rooms = () => {
       </div>
     </>
   );
-};
+}
 
 const TechnologyCard = ({ name, description }: TechnologyCardProps) => {
+  const [presenceData] = usePresence(name);
+  const { data: session } = useSession();
+  const others = presenceData.filter(
+    (item) => item.clientId !== session?.user?.name
+  );
+
   return (
-    <Link href={`/chat/${name}`}>
-      <section className="flex w-1/2 cursor-pointer flex-col justify-center rounded border-2 border-gray-500 p-6 font-mono text-white shadow-xl duration-200 motion-safe:hover:scale-105">
-        <h2 className="text-lg ">{name}</h2>
-        <p className="text-sm ">{description}</p>
-        <a className="mt-3 cursor-pointer text-sm text-violet-500 underline decoration-dotted underline-offset-2">
-          Select
-        </a>
-      </section>
-    </Link>
+    <div className="flex w-1/2 justify-center border-2 border-gray-500 duration-200 motion-safe:hover:scale-105 ">
+      <Link href={`/chat/${name}`}>
+        <div className="flex w-full flex-row justify-between">
+          <section className="flex w-full cursor-pointer flex-col justify-center rounded p-6 font-mono text-white shadow-xl ">
+            <h2 className="text-lg ">{name}</h2>
+            <p className="text-sm ">{description}</p>
+            <a className="mt-3 cursor-pointer text-sm text-violet-500 underline decoration-dotted underline-offset-2">
+              Select
+            </a>
+          </section>
+          {others.length ? (
+            <div className="m-4 h-2 w-2 animate-pulse cursor-pointer rounded-full bg-green-400"></div>
+          ) : null}
+        </div>
+      </Link>
+    </div>
   );
 };
 

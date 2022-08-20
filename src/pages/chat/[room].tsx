@@ -45,10 +45,9 @@ const AblyChatComponent = () => {
   const [presenceData] = usePresence(room);
 
   const others = presenceData
-    .filter((item) => {
-      item.clientId !== USER_NAME;
-    })
+    .filter((item) => item.clientId !== USER_NAME)
     .map((item) => item.clientId);
+
   useEffect(() => {
     boxRef?.current?.scrollIntoView({ behavior: "smooth" });
   }, [receivedMessages]);
@@ -68,9 +67,10 @@ const AblyChatComponent = () => {
                 other folks in the room: {others.length}
               </div>
               {others.length ? (
-                <div className="group relative h-2 w-2 cursor-pointer rounded-full bg-green-400">
+                <div className="group relative cursor-pointer">
+                  <div className="h-2 w-2 rounded-full bg-green-400" />
                   <div>
-                    <ul className="absolute hidden w-fit rounded-lg bg-slate-600 p-4 text-xs group-hover:flex">
+                    <ul className="absolute hidden rounded-lg bg-slate-600 p-4 text-xs group-hover:inline-block">
                       {others.map((name) => (
                         <li key={name}>{name}</li>
                       ))}

@@ -1,5 +1,5 @@
 import Ably from "ably/promises";
-import { randomUUID } from "crypto";
+
 import { NextApiResponse, NextApiRequest } from "next";
 import { unstable_getServerSession as getServerSession } from "next-auth";
 import { authOptions as nextAuthOptions } from "./auth/[...nextauth]";
